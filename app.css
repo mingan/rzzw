@@ -1,0 +1,43 @@
+.container {
+    max-width: 110em;
+}
+/*
+#Olympics {
+    width: 20em;
+    float: left;
+    background: #eee;
+}
+#Events {
+    width: 20em;
+    float: left;
+    clear: right;
+    background: #e2e2e2;
+}
+#Disciplines {
+    width: 40em;
+    float: left;
+    clear: right;
+    background: #ddd;
+}
+#News, #Winners {
+    width: 20em;
+    float: left;
+    clear: right;
+    background: #ccc;
+}
+#Winners li:before {
+    font-variant: small-caps;
+    font-size: .8em;
+    width: 4em;
+    display: inline-block;
+    margin-right: .5em;
+}
+.goldMedal:before {
+    content: "Gold"
+}
+.silverMedal:before {
+    content: "Silver"
+}
+.bronzeMedal:before {
+    content: "Bronze"
+}*/
