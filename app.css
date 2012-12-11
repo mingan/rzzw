@@ -24,7 +24,7 @@
     float: left;
     clear: right;
     background: #ccc;
-}
+}*/
 #Winners li:before {
     font-variant: small-caps;
     font-size: .8em;
@@ -40,4 +40,14 @@
 }
 .bronzeMedal:before {
     content: "Bronze"
-}*/
+}
+.loading {
+    background: #ddd;
+}
+#Map {
+    width: 600px;
+    height: 400px;
+}
+#Map img {
+    max-width: none;
+}
