@@ -24,6 +24,7 @@ jQuery(document).ready(function ($) {
             mapTypeId : google.maps.MapTypeId.ROADMAP
         }
     );
+    var geocoder = new google.maps.Geocoder();
 
     function loadOlympics () {
         var query = [{
@@ -209,7 +210,7 @@ jQuery(document).ready(function ($) {
                         + '</span></a></li></ul>';
                 }
                 $Winners.append(
-                    '<li class="' + medalClass + '" data-country="' + result['country'] + '">'
+                    '<li class="medal ' + medalClass + '" data-country="' + result['country'] + '">'
                         + medalists
                         + '</li>');
             });
@@ -226,15 +227,17 @@ jQuery(document).ready(function ($) {
 
     function loadPersonalInfo ($link) {
         var $Info = $link.after('<div class="infoblock loading">Loading...</div>').siblings('.infoblock');
+        var $Photos = $Info.after('<div class="photos loading">Loading...</div>').siblings('.photos');
         var name = $link.find('span').text();
 
         var query =
             'PREFIX foaf: <http://xmlns.com/foaf/0.1/>' +
                 'PREFIX dbo: <http://dbpedia.org/ontology/>' +
 
-                'select ?abstract where {' +
+                'select ?abstract, ?p, ?img where {' +
                 '?p a foaf:Person ;' +
                 'foaf:name "' + name + '"@en ;' +
+                'foaf:depiction ?img;' +
                 'dbo:abstract ?abstract .' +
                 'FILTER langMatches( lang(?abstract), "EN" )' +
                 '} LIMIT 100';
@@ -249,14 +252,32 @@ jQuery(document).ready(function ($) {
                 $Info.html('No information found');
             } else {
                 $.each(response.results.bindings, function (i, e) {
+                    var slug = e.p.value.match(/\/([^/]+)$/);
+                    slug = slug[1];
+
+                    loadPhotos($Photos, slug);
+
                     $Info.html(e.abstract.value);
                 });
             }
         });
     }
 
+    function loadPhotos ($Photos, slug) {
+        $.getJSON('flickr.php?slug=' + slug, null, function (data) {
+            if (data) {
+                $Photos.html('');
+                $.each(data, function (i, e) {
+                    $Photos.append('<a target="_blank" href="' + e.page + '"><img src="' + e.thumb + '" alt="flickr thumb"></a>');
+                });
+            } else {
+                $Photos.text('No photos from flickr, sorry')
+            }
+            $Photos.removeClass('loading')
+        })
+    }
 
-     loadOlympics();
+    loadOlympics();
 
     var markers = [];
     function showMap () {
@@ -265,14 +286,33 @@ jQuery(document).ready(function ($) {
         });
         markers = [];
 
-        var marker = new google.maps.Marker({
-            map : map,
-            position : new google.maps.LatLng(Math.random()*100,0)
+        var bounds = new google.maps.LatLngBounds();
+        $Winners.find('li.medal').each(function (i, e) {
+            geocode($(e).attr('data-country'), function (p) {
+                bounds.extend(p);
+                map.fitBounds(bounds);
+            });
         });
-        markers.push(marker);
 
         $Map.show();
     }
-    showMap();
 
+    function geocode(query, callback) {
+        geocoder.geocode( {
+            'address': query
+        }, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var pos = new google.maps.LatLng(results[0].geometry.location.Ya, results[0].geometry.location.Za);
+                var marker = new google.maps.Marker({
+                    map : map,
+                    position : pos,
+                    title : query
+                });
+                markers.push(marker);
+                callback(pos);
+            } else {
+                alert("Geocode was not successful for the following reason: " + status);
+            }
+        });
+    }
 });
