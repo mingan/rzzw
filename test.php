@@ -45,6 +45,7 @@
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script src="bootstrap/js/bootstrap.min.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAaaooRwzP5tfuBZ6k95ro8RWlt1MLwpn8&sensor=false"></script>
+	<script src="sort.js"></script>
 	<script src="app.js"></script>
 </body>
 </html>

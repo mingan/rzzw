@@ -1,4 +1,3 @@
-
 var API_KEY = 'AIzaSyAaaooRwzP5tfuBZ6k95ro8RWlt1MLwpn8';
 var mqlServiceUrl = 'https://www.googleapis.com/freebase/v1/mqlread';
 var dbpSparql = 'http://dbpedia.org/sparql';
@@ -25,6 +24,13 @@ jQuery(document).ready(function ($) {
         }
     );
     var geocoder = new google.maps.Geocoder();
+
+    var medalsMap = {
+        gold : 3,
+        silver : 2,
+        bronze : 1,
+        unknown : 0
+    };
 
     function loadOlympics () {
         var query = [{
@@ -197,9 +203,11 @@ jQuery(document).ready(function ($) {
                 medalClass = result["medal"].toLowerCase().match(/gold|silver|bronze/);
                 if (!medalClass) {
                     medalClass = "unknown";
-                } else {
-                    medalClass = medalClass[0] + "Medal";
                 }
+
+                var medalCode= medalsMap[medalClass];
+
+                medalClass = medalClass[0] + "Medal";
                 var medalists = '';
 
                 if (result.medalist.length == 1) {
@@ -210,9 +218,13 @@ jQuery(document).ready(function ($) {
                         + '</span></a></li></ul>';
                 }
                 $Winners.append(
-                    '<li class="medal ' + medalClass + '" data-country="' + result['country'] + '">'
+                    '<li class="medal ' + medalClass + '" data-medal_code="' + medalCode + '" data-country="' + result['country'] + '">'
                         + medalists
                         + '</li>');
+
+                $Winners.find('>li').sortElements(function (a, b) {
+                    return $(a).attr('data-medal_code') < $(b).attr('data-medal_code') ? 1 : -1;
+                })
             });
 
             $Winners.find('a').click(function (e) {
