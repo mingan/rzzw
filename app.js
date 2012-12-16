@@ -187,7 +187,13 @@ jQuery(document).ready(function ($) {
             },
             "limit" : 10,
             "medal" : null,
-            "medalist" : [],
+            "medalist" : [{
+                "name" : null,
+                "key" : [{
+                    "namespace" : "/wikipedia/en",
+                    "value" : null
+                }]
+            }],
             "country" : null
         }];
         var params = {
@@ -211,11 +217,14 @@ jQuery(document).ready(function ($) {
                 var medalists = '';
 
                 if (result.medalist.length == 1) {
-                    medalists = '<div><a href="#medalist' + i + '"><span>' + result.medalist[0] + '</span> - ' + result['country'] + '</a></div>';
+                    medalists = '<div><a href="#medalist' + i + '" data-wiki="' + result.medalist[0].key[0].value + '"><span>' + result.medalist[0].name + '</span> - ' + result['country'] + '</a></div>';
                 } else {
-                    medalists =  result['country'] + '<ul><li><a href="#medalist' + i + '"><span>'
-                        + result.medalist.join('</span></a></li><li><a href="#medalist' + i + '"><span>')
-                        + '</span></a></li></ul>';
+                    medalists = result['country'] + '<ul>';
+                    $.each(result.medalist, function (i, m) {
+                        medalists += '<li><a href="#medalist' + i + '" data-wiki="' + m.key[0].value + '"><span>' + m.name + '</span></a></li>';
+                    });
+                    medalists += '</ul>';
+
                 }
                 $Winners.append(
                     '<li class="medal ' + medalClass + '" data-medal_code="' + medalCode + '" data-country="' + result['country'] + '">'
@@ -239,7 +248,6 @@ jQuery(document).ready(function ($) {
 
     function loadPersonalInfo ($link) {
         var $Info = $link.after('<div class="infoblock loading">Loading...</div>').siblings('.infoblock');
-        var $Photos = $Info.after('<div class="photos loading">Loading...</div>').siblings('.photos');
         var name = $link.find('span').text();
 
         var query =
@@ -266,10 +274,16 @@ jQuery(document).ready(function ($) {
                 $.each(response.results.bindings, function (i, e) {
                     var slug = e.p.value.match(/\/([^/]+)$/);
                     slug = slug[1];
+                    var picture = '';
 
+                    if (e.img.value) {
+                        picture = '<img width="175" src="' + e.img.value + '" alt="Wikipedia photo of ' + name + '" >';
+                    }
+
+                    $Info.html(picture + '<p>' + e.abstract.value + '</p>');
+
+                    var $Photos = $Info.after('<div class="photos lightbox hide fade" id="Lightbox' + Math.round(Math.random() * 10000) + '"></div>').siblings('.photos');
                     loadPhotos($Photos, slug);
-
-                    $Info.html(e.abstract.value);
                 });
             }
         });
@@ -278,14 +292,20 @@ jQuery(document).ready(function ($) {
     function loadPhotos ($Photos, slug) {
         $.getJSON('flickr.php?slug=' + slug, null, function (data) {
             if (data) {
-                $Photos.html('');
+                var id = $Photos.attr('id');
+                var photos = '';
                 $.each(data, function (i, e) {
-                    $Photos.append('<a target="_blank" href="' + e.page + '"><img src="' + e.thumb + '" alt="flickr thumb"></a>');
+                    photos += '<a target="_blank" href="' + e.page + '"><img src="' + e.thumb + '" alt="flickr thumb"></a>';
                 });
-            } else {
-                $Photos.text('No photos from flickr, sorry')
+                $Photos.html('<div class="lightbox-header">' +
+                                '<button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>' +
+                            '</div>' +
+                            '<div class="lightbox-content">' +
+                            photos +
+                            '</div>'
+                );
+                $Photos.siblings('.infoblock').append('<a href="#' + id + '" data-toggle="lightbox">More photos</a>');
             }
-            $Photos.removeClass('loading')
         })
     }
 

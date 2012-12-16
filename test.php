@@ -38,9 +38,19 @@
 		</div>
 	</div>
 
-	<ul id="Winners"></ul>
-	<ul id="News"></ul>
-	<div id="Map"></div>
+	<div class="container content">
+		<ul id="Winners"></ul>
+		<ul id="News"></ul>
+		<div id="Map"></div>
+
+		<div id="Attribution">
+			<h3>Attribution</h3>
+			<a href="http://wifo5-03.informatik.uni-mannheim.de/flickrwrappr/">flickr&trade; wrappr</a>
+			<a href="http://commons.wikimedia.org/wiki/File:Gold_medal.svg">Gold medal icon</a>
+			<a href="http://commons.wikimedia.org/wiki/File:Silver_medal.svg">Silver medal icon</a>
+			<a href="http://commons.wikimedia.org/wiki/File:Bronze_medal.svg">Bronze medal icon</a>
+		</div>
+	</div>
 
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script src="bootstrap/js/bootstrap.min.js"></script>

@@ -25,29 +25,56 @@
     clear: right;
     background: #ccc;
 }*/
-#Winners li:before {
-    font-variant: small-caps;
-    font-size: .8em;
-    width: 4em;
-    display: inline-block;
-    margin-right: .5em;
+.content {
+    width: auto;
 }
-.goldMedal:before {
-    content: "Gold"
+#Winners {
+    min-width: 400px;
+    width: 25%;
+    float: left;
+    padding: 0;
+    margin: 0 1em 0 0;
 }
-.silverMedal:before {
-    content: "Silver"
+#Winners li.medal {
+    list-style-type: none;
+    background: url("img/gold.png") 0 .3em no-repeat;
+    padding-left: 40px;
 }
-.bronzeMedal:before {
-    content: "Bronze"
+#Winners li.silverMedal {
+    background-image: url("img/silver.png");
 }
-.loading {
+#Winners li.bronzeMedal {
+    background-image: url("img/bronze.png");
+}
+.medal a {
+    font-size: 1.5em;
+    line-height: 2;
+}
+.infoblock img {
+    float: right;
+    margin: 0 0 .5em .5em;
+}
+.photos .lightbox-content a {
+    width: 240px;
+    height: 240px;
+    margin: 1em 0 0 1em;
+    display: block;
+    float: left;
+}
+.content .loading {
     background: #ddd;
 }
 #Map {
     width: 600px;
     height: 400px;
+    flaot: right;
 }
 #Map img {
     max-width: none;
+}
+
+#Attribution {
+    margin-top: 2em;
+    clear: both;
+    font-size: .9em;
 }
