@@ -9,10 +9,15 @@ class Dispatcher {
 		}
 		extract($params);
 
-		$fetcherClass = 'Fetchers\\' . Routes::$routes[strtolower($source)];
+		$source = Routes::$routes[strtolower($source)];
+		$type = strtolower($type);
+
+		$fetcherClass = '\Fetchers\\' . $source;
 		$Fetcher = new $fetcherClass();
 		$data = $Fetcher->fetch(array('type' => $type));
-		return $data;
+
+		$View = new \Views\View();
+		return $View->render($source, $type, $data);
 	}
 
 	/**

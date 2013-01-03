@@ -30,6 +30,17 @@ class Freebase extends Fetcher {
 		return $this->request($params);
 	}
 
+	protected function parseResponse ($data) {
+		$data = json_decode($data, true);
+		if (empty($data)) {
+			return array();
+		} else if (isset($data['result'])) {
+			return $data['result'];
+		}
+
+		return $data;
+	}
+
 	/**
 	 * Get MQL query string of given type with MID if necessary
 	 *
