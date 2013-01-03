@@ -4,6 +4,10 @@ spl_autoload_register(function ($class) {
 	require_once __DIR__ . DIRECTORY_SEPARATOR . $class . '.php';
 });
 
-$FB = new Fetchers\Freebase();
+$params = array_intersect_key($_GET, array_flip(array('source', 'type', 'params')));
 
-var_dump($FB->fetch());
+require_once('Routes.php');
+
+$Dispatcher = new Dispatcher\Dispatcher();
+$out = $Dispatcher->dispatch($params);
+var_dump($out);
