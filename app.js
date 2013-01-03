@@ -13,7 +13,7 @@ jQuery(document).ready(function ($) {
     var $Disciplines = $('#Disciplines');
 
     var $Winners = $('#Winners');
-    var $Map = $('#Map').hide();
+    var $Map = $('#Map');//.hide();
     var map = new google.maps.Map(
         document.getElementById("Map"),
         {
@@ -201,6 +201,10 @@ jQuery(document).ready(function ($) {
             'query': JSON.stringify(query)
         };
 
+        function replaceUnicode (string) {
+            return string.replace(/\$00/g, "\\u00");
+        }
+
         $Winners.addClass('loading').html('Loading...');
         $.getJSON(mqlServiceUrl + '?callback=?', params, function(response) {
             $Winners.html('').removeClass('loading');
@@ -215,13 +219,15 @@ jQuery(document).ready(function ($) {
 
                 medalClass = medalClass[0] + "Medal";
                 var medalists = '';
-
+                $.each(result.medalist, function(i, e) {
+                    console.log(e.key[0].value);
+                });
                 if (result.medalist.length == 1) {
-                    medalists = '<div><a href="#medalist' + i + '" data-wiki="' + result.medalist[0].key[0].value + '"><span>' + result.medalist[0].name + '</span> - ' + result['country'] + '</a></div>';
+                    medalists = '<div><a href="#medalist' + i + '" data-wiki="' + replaceUnicode(result.medalist[0].key[0].value) + '"><span>' + result.medalist[0].name + '</span> - ' + result['country'] + '</a></div>';
                 } else {
                     medalists = result['country'] + '<ul>';
                     $.each(result.medalist, function (i, m) {
-                        medalists += '<li><a href="#medalist' + i + '" data-wiki="' + m.key[0].value + '"><span>' + m.name + '</span></a></li>';
+                        medalists += '<li><a href="#medalist' + i + '" data-wiki="' + replaceUnicode(m.key[0].value) + '"><span>' + m.name + '</span></a></li>';
                     });
                     medalists += '</ul>';
 
@@ -248,17 +254,20 @@ jQuery(document).ready(function ($) {
 
     function loadPersonalInfo ($link) {
         var $Info = $link.after('<div class="infoblock loading">Loading...</div>').siblings('.infoblock');
+        var $Photos = $Info.after('<div class="photos lightbox hide fade" id="Lightbox' + Math.round(Math.random() * 10000) + '"></div>').siblings('.photos');
         var name = $link.find('span').text();
+        var slug = $link.attr('data-wiki');
 
+        loadPhotos($Photos, slug);
+        var dbpUrl = '<http://dbpedia.org/resource/' + slug + '>';
         var query =
             'PREFIX foaf: <http://xmlns.com/foaf/0.1/>' +
                 'PREFIX dbo: <http://dbpedia.org/ontology/>' +
 
-                'select ?abstract, ?p, ?img where {' +
-                '?p a foaf:Person ;' +
-                'foaf:name "' + name + '"@en ;' +
-                'foaf:depiction ?img;' +
+                'select ?abstract, ?img where {' +
+                dbpUrl + ' a foaf:Person ;' +
                 'dbo:abstract ?abstract .' +
+                'OPTIONAL {' + dbpUrl + ' foaf:depiction ?img}' +
                 'FILTER langMatches( lang(?abstract), "EN" )' +
                 '} LIMIT 100';
         var params = {
@@ -272,8 +281,6 @@ jQuery(document).ready(function ($) {
                 $Info.html('No information found');
             } else {
                 $.each(response.results.bindings, function (i, e) {
-                    var slug = e.p.value.match(/\/([^/]+)$/);
-                    slug = slug[1];
                     var picture = '';
 
                     if (e.img.value) {
@@ -282,8 +289,6 @@ jQuery(document).ready(function ($) {
 
                     $Info.html(picture + '<p>' + e.abstract.value + '</p>');
 
-                    var $Photos = $Info.after('<div class="photos lightbox hide fade" id="Lightbox' + Math.round(Math.random() * 10000) + '"></div>').siblings('.photos');
-                    loadPhotos($Photos, slug);
                 });
             }
         });
@@ -313,6 +318,7 @@ jQuery(document).ready(function ($) {
 
     var markers = [];
     function showMap () {
+        $Map.show();
         $.each(markers, function (i, m) {
             m.setMap(null);
         });
@@ -326,7 +332,6 @@ jQuery(document).ready(function ($) {
             });
         });
 
-        $Map.show();
     }
 
     function geocode(query, callback) {
