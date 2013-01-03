@@ -33,24 +33,7 @@ jQuery(document).ready(function ($) {
     };
 
     function loadOlympics () {
-        var query = [{
-            "type" : "/olympics/olympic_games",
-            "name" : null,
-            "/time/event/start_date<=" : "2012-11-22",
-            "/time/event/start_date" : null,
-            "sort" : ["-/time/event/start_date", "-name"],
-            "host_city" : null,
-            "mid" : null
-        }];
-        var params = {
-            'key': API_KEY,
-            'query': JSON.stringify(query)
-        };
-
-        $.getJSON(mqlServiceUrl + '?callback=?', params, function(response) {
-            $.each(response.result, function(i, result) {
-                $Olympics.append('<li><a href="#' + result['mid'] + '" data-og_name="' + result['name'] + '">' + result['name'] + ', ' + result['host_city'] + '</a></li>');
-            });
+        $Olympics.load('dispatch.php?source=freebase&type=games', null, function () {
             olympicsLoaded();
         });
     }
