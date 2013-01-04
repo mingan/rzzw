@@ -36,10 +36,13 @@ abstract class Fetcher {
 		curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, 0);
 		curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($handle, CURLOPT_FOLLOWLOCATION, true);
+
 		$data = curl_exec($handle);
 
 		$error = curl_errno($handle);
-		if ($error > 0) {
+		$status = curl_getinfo($handle);
+		if ($error > 0 || $status['http_code'] != 200)  {
 			return null;
 		}
 

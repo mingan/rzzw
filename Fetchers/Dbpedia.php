@@ -61,16 +61,26 @@ class Dbpedia extends Fetcher {
 		}
 
 		$dbpUrl = '<http://dbpedia.org/resource/' . $ident . '>';
-		$query = 'PREFIX foaf: <http://xmlns.com/foaf/0.1/> ' .
+		$query =
+			'PREFIX foaf: <http://xmlns.com/foaf/0.1/> ' .
 			'PREFIX dbo: <http://dbpedia.org/ontology/> ' .
+
 			'select ?abstract, ?img, ?name where {' .
-			$dbpUrl . ' a foaf:Person;' .
-			'foaf:name ?name;' .
-			'dbo:abstract ?abstract . ' .
-			'OPTIONAL {' . $dbpUrl . ' foaf:depiction ?img} ' .
-			'FILTER langMatches( lang(?abstract), "EN" )' .
+				'{' .
+					$dbpUrl . ' a foaf:Person;' .
+						'foaf:name ?name;' .
+						'dbo:abstract ?abstract . ' .
+					'OPTIONAL {' . $dbpUrl . ' foaf:depiction ?img} ' .
+				'} UNION {' .
+					$dbpUrl . ' dbo:wikiPageRedirects ?u .' .
+					'?u a foaf:Person;' .
+						'foaf:name ?name;' .
+						'dbo:abstract ?abstract . ' .
+					'OPTIONAL {?u foaf:depiction ?img} ' .
+				'}' .
+				'FILTER langMatches( lang(?abstract), "EN" )' .
 			'} LIMIT 1'; // @todo víc?
-		
+
 		return $query;
 	}
 }

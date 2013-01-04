@@ -133,11 +133,10 @@ jQuery(document).ready(function ($) {
 
     function loadPersonalInfo ($link) {
         var $Info = $link.after('<div class="infoblock loading">Loading...</div>').siblings('.infoblock');
-        var $Photos = $Info.after('<div class="photos lightbox hide fade" id="Lightbox' + Math.round(Math.random() * 10000) + '"></div>').siblings('.photos');
+        var $Photos = $Info.after('<div class="photos" id="Lightbox' + Math.round(Math.random() * 10000) + '"></div>').siblings('.photos');
         var slug = $link.attr('data-wiki');
 
         loadPhotos($Photos, slug);
-
 
         $Info.load('dispatch.php?source=dbpedia&type=bio&params=' + slug, null, function () {
             $Info.removeClass('loading');
@@ -145,23 +144,7 @@ jQuery(document).ready(function ($) {
     }
 
     function loadPhotos ($Photos, slug) {
-        $.getJSON('flickr.php?slug=' + slug, null, function (data) {
-            if (data) {
-                var id = $Photos.attr('id');
-                var photos = '';
-                $.each(data, function (i, e) {
-                    photos += '<a target="_blank" href="' + e.page + '"><img src="' + e.thumb + '" alt="flickr thumb"></a>';
-                });
-                $Photos.html('<div class="lightbox-header">' +
-                                '<button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>' +
-                            '</div>' +
-                            '<div class="lightbox-content">' +
-                            photos +
-                            '</div>'
-                );
-                $Photos.siblings('.infoblock').append('<a href="#' + id + '" data-toggle="lightbox">More photos</a>');
-            }
-        })
+        $Photos.load('dispatch.php?source=flickr&type=photos&params=' + slug);
     }
 
     loadOlympics();
