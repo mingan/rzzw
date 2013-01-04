@@ -7,7 +7,7 @@ class View {
 
 		ob_start();
 		require __DIR__
-			. DIRECTORY_SEPARATOR . ucfirst($source)
+			. DIRECTORY_SEPARATOR . $source
 			. DIRECTORY_SEPARATOR . $type . '.php';
 		$output = ob_get_clean();
 

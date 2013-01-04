@@ -15,6 +15,9 @@ class Freebase extends Fetcher {
 	 * @return mixed|null
 	 */
 	public function fetch ($options = array()) {
+		if (isset($options['params'])) {
+			$options['mid'] = $options['params'];
+		}
 		$default = array(
 			'type' => 'games',
 			'mid' => null
@@ -63,7 +66,7 @@ class Freebase extends Fetcher {
 	            "!pd:/time/event/includes_event": [
 	                {
 	                    "!index": null,
-	                    "mid": ' . $mid . ',
+	                    "mid": "' . $mid . '",
 	                    "type": "/time/event"
 	                }
 	            ],
@@ -76,7 +79,7 @@ class Freebase extends Fetcher {
 	            "!pd:/time/event/includes_event": [
 	                {
 	                    "!index": null,
-	                    "mid": ' . $mid . ',
+	                    "mid": "' . $mid . '",
 	                    "type": "/time/event"
 	                }
 	            ],
@@ -88,7 +91,7 @@ class Freebase extends Fetcher {
 			'winners' => '[{
 	            "type" : "/olympics/olympic_medal_honor",
 	            "event" : {
-	                "mid" : ' . $mid . '
+	                "mid" : "' . $mid . '"
 	            },
 	            "limit" : 10,
 	            "medal" : null,
@@ -101,7 +104,7 @@ class Freebase extends Fetcher {
 	            }]'
 		);
 
-		if (empty($queries[$type]) || $type != 'games' && empty($mid)) {
+		if (empty($queries[$type]) || ($type != 'games' && empty($mid))) {
 			return '';
 		}
 

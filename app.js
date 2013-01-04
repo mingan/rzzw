@@ -56,37 +56,17 @@ jQuery(document).ready(function ($) {
     }
 
     function loadEventsFor (mid) {
-        var query = [{
-            "!pd:/time/event/includes_event": [
-                {
-                    "!index": null,
-                    "mid": mid,
-                    "type": "/time/event"
-                }
-            ],
-            "mid": null,
-            "name": null,
-            "sort": "!pd:/time/event/includes_event.!index",
-            "type": "/time/event"
-        }];
-        var params = {
-            'key': API_KEY,
-            'query': JSON.stringify(query)
-        };
-
         $EventsSelector
             .parent('.hide')
             .removeClass('hide')
             .end()
             .addClass('loading')
-            .find('span').text('Loading...')
-        $Events.html('');
-        var currentName = ' at the ' + $OGSelector.find('span').attr('data-og_name');
-        $.getJSON(mqlServiceUrl + '?callback=?', params, function(response) {
-            $.each(response.result, function(i, result) {
-                var name = result['name'];
-                name = name.replace(currentName, '');
-                $Events.append('<li><a href="#' + result['mid'] + '">' + name + '</a></li>');
+            .find('span').text('Loading...');
+
+        $Events.load('dispatch.php?source=freebase&type=events&params=' + mid, null, function () {
+            var currentName = new RegExp(' at (the)? ' + $OGSelector.find('span').attr('data-og_name') + '?');
+            $Events.find('li a').each(function (i, e) {
+                $(e).text($(e).text().replace(currentName, ''));
             });
             eventsLoaded();
         });
