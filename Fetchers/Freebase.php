@@ -101,7 +101,9 @@ class Freebase extends Fetcher {
 	                    "namespace" : "/wikipedia/en",
 	                    "value" : null
 	                }]
-	            }]'
+	            }],
+                "country" : null
+	        }]'
 		);
 
 		if (empty($queries[$type]) || ($type != 'games' && empty($mid))) {

@@ -25,12 +25,6 @@ jQuery(document).ready(function ($) {
     );
     var geocoder = new google.maps.Geocoder();
 
-    var medalsMap = {
-        gold : 3,
-        silver : 2,
-        bronze : 1,
-        unknown : 0
-    };
 
     function repmoveStringFromElements (str, $els) {
         $els.each(function (i, e) {
@@ -126,73 +120,14 @@ jQuery(document).ready(function ($) {
     }
 
     function loadWinnersOf (mid) {
-        var query = [{
-            "type" : "/olympics/olympic_medal_honor",
-            "event" : {
-                "mid" : mid
-            },
-            "limit" : 10,
-            "medal" : null,
-            "medalist" : [{
-                "name" : null,
-                "key" : [{
-                    "namespace" : "/wikipedia/en",
-                    "value" : null
-                }]
-            }],
-            "country" : null
-        }];
-        var params = {
-            'key': API_KEY,
-            'query': JSON.stringify(query)
-        };
-
-        function replaceUnicode (string) {
-            return string.replace(/\$00/g, "\\u00");
-        }
-
         $Winners.addClass('loading').html('Loading...');
-        $.getJSON(mqlServiceUrl + '?callback=?', params, function(response) {
-            $Winners.html('').removeClass('loading');
-            $.each(response.result, function(i, result) {
-                var medalClass = null;
-                medalClass = result["medal"].toLowerCase().match(/gold|silver|bronze/);
-                if (!medalClass) {
-                    medalClass = "unknown";
-                }
-
-                var medalCode= medalsMap[medalClass];
-
-                medalClass = medalClass[0] + "Medal";
-                var medalists = '';
-                $.each(result.medalist, function(i, e) {
-                    console.log(e.key[0].value);
+        $Winners.load('dispatch.php?source=freebase&type=winners&params=' + mid, null, function () {
+            $Winners
+                .removeClass('loading')
+                .find('a').click(function (e) {
+                    e.preventDefault();
+                    loadPersonalInfo($(this));
                 });
-                if (result.medalist.length == 1) {
-                    medalists = '<div><a href="#medalist' + i + '" data-wiki="' + replaceUnicode(result.medalist[0].key[0].value) + '"><span>' + result.medalist[0].name + '</span> - ' + result['country'] + '</a></div>';
-                } else {
-                    medalists = result['country'] + '<ul>';
-                    $.each(result.medalist, function (i, m) {
-                        medalists += '<li><a href="#medalist' + i + '" data-wiki="' + replaceUnicode(m.key[0].value) + '"><span>' + m.name + '</span></a></li>';
-                    });
-                    medalists += '</ul>';
-
-                }
-                $Winners.append(
-                    '<li class="medal ' + medalClass + '" data-medal_code="' + medalCode + '" data-country="' + result['country'] + '">'
-                        + medalists
-                        + '</li>');
-
-                $Winners.find('>li').sortElements(function (a, b) {
-                    return $(a).attr('data-medal_code') < $(b).attr('data-medal_code') ? 1 : -1;
-                })
-            });
-
-            $Winners.find('a').click(function (e) {
-                e.preventDefault();
-
-                loadPersonalInfo($(this));
-            });
 
             showMap();
         });
