@@ -1,5 +1,3 @@
-var API_KEY = 'AIzaSyAaaooRwzP5tfuBZ6k95ro8RWlt1MLwpn8';
-var mqlServiceUrl = 'https://www.googleapis.com/freebase/v1/mqlread';
 var dbpSparql = 'http://dbpedia.org/sparql';
 
 jQuery(document).ready(function ($) {
@@ -136,42 +134,13 @@ jQuery(document).ready(function ($) {
     function loadPersonalInfo ($link) {
         var $Info = $link.after('<div class="infoblock loading">Loading...</div>').siblings('.infoblock');
         var $Photos = $Info.after('<div class="photos lightbox hide fade" id="Lightbox' + Math.round(Math.random() * 10000) + '"></div>').siblings('.photos');
-        var name = $link.find('span').text();
         var slug = $link.attr('data-wiki');
 
         loadPhotos($Photos, slug);
-        var dbpUrl = '<http://dbpedia.org/resource/' + slug + '>';
-        var query =
-            'PREFIX foaf: <http://xmlns.com/foaf/0.1/>' +
-                'PREFIX dbo: <http://dbpedia.org/ontology/>' +
 
-                'select ?abstract, ?img where {' +
-                dbpUrl + ' a foaf:Person ;' +
-                'dbo:abstract ?abstract .' +
-                'OPTIONAL {' + dbpUrl + ' foaf:depiction ?img}' +
-                'FILTER langMatches( lang(?abstract), "EN" )' +
-                '} LIMIT 100';
-        var params = {
-            'query' : query,
-            'default-graph-uri' : 'http://dbpedia.org'
-        };
 
-        $.getJSON(dbpSparql, params, function (response) {
+        $Info.load('dispatch.php?source=dbpedia&type=bio&params=' + slug, null, function () {
             $Info.removeClass('loading');
-            if (response.results.bindings.length == 0) {
-                $Info.html('No information found');
-            } else {
-                $.each(response.results.bindings, function (i, e) {
-                    var picture = '';
-
-                    if (e.img.value) {
-                        picture = '<img width="175" src="' + e.img.value + '" alt="Wikipedia photo of ' + name + '" >';
-                    }
-
-                    $Info.html(picture + '<p>' + e.abstract.value + '</p>');
-
-                });
-            }
         });
     }
 

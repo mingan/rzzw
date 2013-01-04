@@ -11,18 +11,31 @@ abstract class Fetcher {
 	 */
 	protected static $queryUrl;
 
+
+	protected static $mimeTypes = array(
+		'json' => 'application/json',
+		'xml' => ''
+	);
+
 	/**
 	 * Calls service with curl, fetches response and decodes it
 	 *
 	 * @param string $urlParams
+	 * @param string $format MIME type of expected response
 	 * @return mixed|null
 	 */
-	protected function request ($urlParams = '') {
+	protected function request ($urlParams = '', $format = null) {
+		$headers = array();
+		if (!empty($format) && !empty(static::$mimeTypes[$format])) {
+			$headers[] = 'Accept: ' . static::$mimeTypes[$format];
+		}
+
 		$handle = curl_init(static::$queryUrl . '?' . $urlParams);
 
 		curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, 0);
 		curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
 		$data = curl_exec($handle);
 
 		$error = curl_errno($handle);

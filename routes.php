@@ -4,7 +4,7 @@ namespace Dispatcher;
 class Routes {
 	public static $routes = array(
 		'freebase' => 'Freebase',
-		'dbp' => 'DBPedia',
+		'dbpedia' => 'Dbpedia',
 		'flickr' => 'Flickr'
 	);
 }
