@@ -39,9 +39,9 @@
 	</div>
 
 	<div class="container content">
+		<div id="Map"></div>
 		<ul id="Winners"></ul>
 		<ul id="News"></ul>
-		<div id="Map"></div>
 
 		<div id="Attribution">
 			<h3>Attribution</h3>

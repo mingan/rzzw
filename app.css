@@ -1,36 +1,21 @@
 .container {
     max-width: 110em;
 }
-/*
-#Olympics {
-    width: 20em;
-    float: left;
-    background: #eee;
-}
-#Events {
-    width: 20em;
-    float: left;
-    clear: right;
-    background: #e2e2e2;
-}
-#Disciplines {
-    width: 40em;
-    float: left;
-    clear: right;
-    background: #ddd;
-}
-#News, #Winners {
-    width: 20em;
-    float: left;
-    clear: right;
-    background: #ccc;
-}*/
 .content {
     width: auto;
+    padding: 0 2em;
+}
+#Map {
+    width: 600px;
+    height: 400px;
+    flaot: right;
+}
+#Map img {
+    max-width: none;
 }
 #Winners {
     min-width: 400px;
-    width: 25%;
+    width: 40%;
     float: left;
     padding: 0;
     margin: 0 1em 0 0;
@@ -50,27 +35,67 @@
     font-size: 1.5em;
     line-height: 2;
 }
+.infoblock {
+    clear: both;
+}
 .infoblock img {
     float: right;
     margin: 0 0 .5em .5em;
 }
-.photos .lightbox-content a {
+.photos {
+    width: 100%;
+    max-height: 280px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    border-width: 0 2px;
+    margin: 0 -2px;
+    -webkit-transition: all 250ms ease;
+    -moz-transition: all 250ms ease;
+    -ms-transition: all 250ms ease;
+    -o-transition: all 250ms ease;
+    transition: all 250ms ease;
+}
+.photos.moreOnLeft {
+    border-left-color: #999;
+}
+.photos.moreOnRight {
+    border-right-color: #999;
+}
+.photos:hover {
+    width: 200%;
+    overflow: auto;
+}
+.photos div {
+    width: 7860px;/* 262 × 30 */
+    height: 100%;
+    overflow: hidden;
+}
+.photos a {
+    display: block;
+    position: relative;
+    float: left;
+    clear: right;
     width: 240px;
     height: 240px;
-    margin: 1em 0 0 1em;
-    display: block;
-    float: left;
+    margin: 10px;
+}
+.photos a:first-child {
+    margin-left: 0;
+}
+.photos a:last-child {
+    margin-right: 0;
+}
+.photos img {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border: 1px solid #999;
 }
 .content .loading {
     background: #ddd;
-}
-#Map {
-    width: 600px;
-    height: 400px;
-    flaot: right;
-}
-#Map img {
-    max-width: none;
 }
 
 #Attribution {

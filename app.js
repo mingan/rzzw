@@ -177,7 +177,7 @@ var map = {};
 
     this.loadPersonalInfo = function ($link) {
         var $Info = $link.after('<div class="infoblock loading">Loading...</div>').siblings('.infoblock');
-        var $Photos = $Info.after('<div class="photos" id="Lightbox' + Math.round(Math.random() * 10000) + '"></div>').siblings('.photos');
+        var $Photos = $Info.after('<div class="photos"></div>').siblings('.photos').hide();
         var slug = $link.attr('data-wiki');
 
         _this.loadPhotos($Photos, slug);
@@ -188,7 +188,23 @@ var map = {};
     }
 
     this.loadPhotos = function ($Photos, slug) {
-        $Photos.load('dispatch.php?source=flickr&type=photos&params=' + slug);
+        $Photos.load('dispatch.php?source=flickr&type=photos&params=' + slug, null, function () {
+
+            $Photos.show()
+                .scroll(function () {
+                    var photosLeft = $(this).position()['left'];
+                    var $wrapper = $(this).find('>div');
+                    var wrapperLeft = $wrapper.position()['left'];
+
+                    $(this)
+                        .toggleClass('moreOnLeft', wrapperLeft < photosLeft)
+                        .toggleClass('moreOnRight', wrapperLeft + $wrapper.width() - $(this).width() > photosLeft)
+
+                })
+                .find('>div')
+                    .css('width', $Photos.find('img').length * 262)
+
+        });
     }
 
 }).apply(rzzw);
