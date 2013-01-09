@@ -39,10 +39,22 @@
 	</div>
 
 	<div class="container content">
-		<div id="Map"></div>
+
 		<ul id="Winners"></ul>
-		<a href="http://developer.nytimes.com"><img src="http://graphics8.nytimes.com/packages/images/developer/logos/poweredby_nytimes_30b.png" width="30" height="30"></a>
-		<ul id="News"></ul>
+		<div id="Map"></div>
+
+		<div id="InfoblockContainer">
+			<div id="Infoblock"></div>
+		</div>
+
+		<div id="NewsContainer">
+			<h2><a href="http://developer.nytimes.com"><img src="http://graphics8.nytimes.com/packages/images/developer/logos/poweredby_nytimes_30b.png" width="30" height="30">New York Times articles</a></h2>
+			<div id="News"></div>
+		</div>
+		<div id="PhotosContainer">
+			<h2>Photos from flickr</h2>
+			<div id="Photos"></div>
+		</div>
 
 		<div id="Attribution">
 			<h3>Attribution</h3>

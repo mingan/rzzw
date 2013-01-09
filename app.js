@@ -68,19 +68,14 @@ var map = {};
     var $Disciplines = $('#Disciplines');
 
     var $Winners = $('#Winners');
+    var $Infoblock = $('#Infoblock');
     var $News = $('#News');
+    var $Photos = $('#Photos');
 
-    this.toggler = function ($toToggle) {
-        return $('<a href="#" alt="+" class="toggle btn">-</a>').click(function (e) {
-            e.preventDefault();
-            $this = $(this);
-
-            $toToggle.toggle($this.text() == '+');
-
-            var tmp = $this.text();
-            $this.text($this.attr('alt')).attr('alt', tmp);
-        });
-    };
+    $Winners.parent().hide();
+    $Infoblock.parent().hide();
+    $News.parent().hide();
+    $Photos.parent().hide();
 
     this.removeStringFromElements = function (str, $els) {
         $els.each(function (i, e) {
@@ -157,7 +152,6 @@ var map = {};
             _this.disciplinesLoaded();
         });
     }
-
     this.disciplinesLoaded = function () {
         $DisciplinesSelector
             .removeClass('loading')
@@ -176,7 +170,7 @@ var map = {};
     }
 
     this.loadWinnersOf = function (mid) {
-        $Winners.addClass('loading').html('Loading...');
+        $Winners.addClass('loading').parent().show();
         $Winners.load('dispatch.php?source=freebase&type=winners&params=' + mid, null, function () {
             $Winners
                 .removeClass('loading')
@@ -190,50 +184,39 @@ var map = {};
     }
 
     this.loadPersonalInfo = function ($link) {
-        var $Info = $link.after('<div class="infoblock loading">Loading...</div>').siblings('.infoblock');
-        var $Photos = $Info.after('<h3>Photos from flickr</h3><div class="photos"></div>').siblings('.photos').hide();
         var slug = $link.attr('data-wiki');
 
-        $link.after('<h2>' + $link.html() + '</h2>', _this.toggler($link.siblings()));
-        $link.remove();
+        $Infoblock
+            .parent()
+                .show()
+            .end()
+            .addClass('loading')
+            .load('dispatch.php?source=dbpedia&type=bio&params=' + slug, null, function () {
+                $Infoblock.removeClass('loading');
 
-        _this.loadPhotos($Photos, slug);
+                _this.loadNews($Infoblock.find('.nytUrl').attr('data-nyt'));
+            });
 
-        $Info.load('dispatch.php?source=dbpedia&type=bio&params=' + slug, null, function () {
-            $Info.removeClass('loading');
-
-            _this.loadNews($Info.find('.nytUrl').attr('data-nyt'));
-        });
-
+        _this.loadPhotos(slug);
     }
 
-    this.loadPhotos = function ($Photos, slug) {
+    this.loadPhotos = function (slug) {
         $Photos.load('dispatch.php?source=flickr&type=photos&params=' + slug, null, function () {
-
-            $Photos.show()
-                .scroll(function () {
-                    var photosLeft = $(this).position()['left'];
-                    var $wrapper = $(this).find('>div');
-                    var wrapperLeft = $wrapper.position()['left'];
-
-                    $(this)
-                        .toggleClass('moreOnLeft', wrapperLeft < photosLeft)
-                        .toggleClass('moreOnRight', wrapperLeft + $wrapper.width() - $(this).width() > photosLeft)
-
-                })
-                .find('>div')
-                    .css('width', $Photos.find('img').length * 262)
-
+            $Photos
+                .parent()
+                    .show()
+                .end()
         });
     }
 
     this.loadNews = function (nytUrl) {
+        $News.parent().show();
         if (!nytUrl || nytUrl == '') {
             $News.html('No articles found');
             return;
         }
 
-        $News.addClass('loading').html('Loading...')
+        $News.addClass('loading')
             .load('dispatch.php?source=nytdata&type=data&params=' + nytUrl, null, function () {
                 $News.removeClass('loading');
             });
