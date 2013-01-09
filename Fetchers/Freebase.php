@@ -72,7 +72,7 @@ class Freebase extends Fetcher {
 	            ],
 	            "mid": null,
 	            "name": null,
-	            "sort": "!pd:/time/event/includes_event.!index",
+	            "sort": "name",
 	            "type": "/time/event"
 	        }]',
 			'disciplines' => '[{
@@ -85,7 +85,7 @@ class Freebase extends Fetcher {
 	            ],
 	            "mid": null,
 	            "name": null,
-	            "sort": "!pd:/time/event/includes_event.!index",
+	            "sort": "name",
 	            "type": "/time/event"
 	        }]',
 			'winners' => '[{
