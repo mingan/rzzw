@@ -2,6 +2,9 @@ var rzzw = {};
 var map = {};
 
 (function () {
+    var _this = this;
+    var cache = {};
+
     var $Map = $('#Map');
     var map = new google.maps.Map(
         document.getElementById("Map"),
@@ -28,31 +31,44 @@ var map = {};
 
         var bounds = new google.maps.LatLngBounds();
         $Winners.find('li.medal').each(function (i, e) {
-            geocode($(e).attr('data-country'), function (p) {
+            _this.geocode($(e).attr('data-country'), function (p) {
                 bounds.extend(p);
                 map.fitBounds(bounds);
+                if (map.getZoom() > 6) {
+                    map.setZoom(6);
+                }
             });
         });
 
     }
 
-    function geocode(query, callback) {
-        geocoder.geocode( {
-            'address': query
-        }, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                var pos = new google.maps.LatLng(results[0].geometry.location.Ya, results[0].geometry.location.Za);
-                var marker = new google.maps.Marker({
-                    map : map,
-                    position : pos,
-                    title : query
-                });
-                markers.push(marker);
-                callback(pos);
-            } else {
-                alert("Geocode was not successful for the following reason: " + status);
-            }
+    this.addMarker = function (position, callback) {
+        var marker = new google.maps.Marker({
+            map : _this.map,
+            position : position,
+            title : " "
         });
+        markers.push(marker);
+        callback(position);
+    }
+    this.geocode = function (query, callback) {
+        if (cache[query] != undefined) {
+            _this.addMarker(cache[query], callback);
+        } else {
+            geocoder.geocode( {
+                'address': query
+            }, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[0].types.indexOf("country") != -1) {
+                        var pos = new google.maps.LatLng(results[0].geometry.location.Ya, results[0].geometry.location.Za);
+                        _this.addMarker(pos, callback)
+                        cache[query] = pos;
+                    }
+                } else {
+                    alert("Geocode was not successful for the following reason: " + status);
+                }
+            });
+        }
     }
 }).apply(map);
 
