@@ -187,6 +187,7 @@ var map = {};
                 .find('a').click(function (e) {
                     e.preventDefault();
                     _this.loadPersonalInfo($(this));
+                    window.location.hash = '#Infoblock';
                 });
 
             map.showMap($Winners);
