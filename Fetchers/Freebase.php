@@ -30,7 +30,7 @@ class Freebase extends Fetcher {
 		);
 		$params = preg_replace('#\s+#', '', implode('&', $params));
 
-		return $this->request($params);
+		return $this->returnData($this->request($params));
 	}
 
 	protected function parseResponse ($data) {

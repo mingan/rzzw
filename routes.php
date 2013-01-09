@@ -5,6 +5,8 @@ class Routes {
 	public static $routes = array(
 		'freebase' => 'Freebase',
 		'dbpedia' => 'Dbpedia',
-		'flickr' => 'Flickr'
+		'flickr' => 'Flickr',
+		'nytdata' => 'NytimesData',
+		'nytsearch' => 'NytimesSearch'
 	);
 }

@@ -20,10 +20,14 @@ class Dispatcher {
 
 		$fetcherClass = '\Fetchers\\' . $params['source'];
 		$Fetcher = new $fetcherClass();
-		$data = $Fetcher->fetch(array('type' => $params['type'], 'params' => $params['params']));
+		$response = $Fetcher->fetch(array('type' => $params['type'], 'params' => $params['params']));
+
+		if (!empty($response['redirect'])) {
+			return $this->dispatch($response['redirect']);
+		}
 
 		$View = new \Views\View();
-		$content = $View->render($params['source'], $params['type'], $data);
+		$content = $View->render($params['source'], $params['type'], $response['data']);
 
 		if (CACHE_CHECK) {
 			Cache::save($params, $content);

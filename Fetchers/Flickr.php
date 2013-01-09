@@ -25,7 +25,7 @@ class Flickr extends Fetcher {
 
 		$params = 'format=rdf';
 
-		return $this->request($params, 'json');
+		return $this->returnData($this->request($params, 'json'));
 	}
 
 	protected function parseResponse ($data) {

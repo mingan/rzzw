@@ -42,6 +42,7 @@ abstract class Fetcher {
 
 		$error = curl_errno($handle);
 		$status = curl_getinfo($handle);
+
 		if ($error > 0 || $status['http_code'] != 200)  {
 			return null;
 		}
@@ -60,6 +61,18 @@ abstract class Fetcher {
 		$data = json_decode($data, true);
 
 		return $data;
+	}
+
+	/**
+	 * Helper function to wrap resulting data in response array
+	 *
+	 * @param $data
+	 * @return array
+	 */
+	protected function returnData($data) {
+		return array(
+			'data' => $data
+		);
 	}
 
 	/**

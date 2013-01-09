@@ -68,6 +68,18 @@ var map = {};
     var $Disciplines = $('#Disciplines');
 
     var $Winners = $('#Winners');
+    this.toggler = function ($toToggle) {
+        return $('<a href="#" alt="+" class="toggle btn">-</a>').click(function (e) {
+            e.preventDefault();
+            $this = $(this);
+
+            $toToggle.toggle($this.text() == '+');
+
+            var tmp = $this.text();
+            $this.text($this.attr('alt')).attr('alt', tmp);
+        });
+    };
+
     this.removeStringFromElements = function (str, $els) {
         $els.each(function (i, e) {
             $(e).text($(e).text().replace(str, ''));
@@ -177,8 +189,11 @@ var map = {};
 
     this.loadPersonalInfo = function ($link) {
         var $Info = $link.after('<div class="infoblock loading">Loading...</div>').siblings('.infoblock');
-        var $Photos = $Info.after('<div class="photos"></div>').siblings('.photos').hide();
+        var $Photos = $Info.after('<h3>Photos from flickr</h3><div class="photos"></div>').siblings('.photos').hide();
         var slug = $link.attr('data-wiki');
+
+        $link.after('<h2>' + $link.html() + '</h2>', _this.toggler($link.siblings()));
+        $link.remove();
 
         _this.loadPhotos($Photos, slug);
 

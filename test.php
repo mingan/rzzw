@@ -41,6 +41,7 @@
 	<div class="container content">
 		<div id="Map"></div>
 		<ul id="Winners"></ul>
+		<a href="http://developer.nytimes.com"><img src="http://graphics8.nytimes.com/packages/images/developer/logos/poweredby_nytimes_30b.png" width="30" height="30"></a>
 		<ul id="News"></ul>
 
 		<div id="Attribution">

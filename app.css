@@ -31,9 +31,18 @@
 #Winners li.bronzeMedal {
     background-image: url("img/bronze.png");
 }
-.medal a {
+.medal a, .medal h2 {
     font-size: 1.5em;
     line-height: 2;
+}
+.medal h3 {
+    font-size: 1.2em;
+    margin-bottom: 0;
+}
+.medal .toggle {
+    font-size: .8em;
+    margin-top: -4em;
+    float: right;
 }
 .infoblock {
     clear: both;

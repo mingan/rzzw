@@ -2,10 +2,9 @@
 namespace Fetchers;
 
 /*
- * Fetches query from DBPedia via SPARQL endpoint
+ * Fetches RDF data from NYTimes
  */
-class Dbpedia extends Fetcher {
-	protected static $queryUrl = 'http://dbpedia.org/sparql';
+class NytimesData extends Fetcher {
 
 	/**
 	 * Public method for fetching different types of data with predefined queries
@@ -14,39 +13,40 @@ class Dbpedia extends Fetcher {
 	 * @return mixed|null
 	 */
 	public function fetch ($options = array()) {
-		if (isset($options['params'])) {
-			$options['ident'] = $options['params'];
-		}
-		$default = array(
-			'ident' => null
-		);
-		$options += $default;
+		static::$queryUrl = $options['params'] . '.json';
 
-		$params = array(
-			'query=' . urlencode($this->constructQuery($options['ident'])),
-			'default-graph-uri=' . urlencode('http://dbpedia.org')
-		);
-		$params = implode('&', $params);
+		$result = $this->request();
 
-		return $this->returnData($this->request($params, 'json'));
+		return array(
+			'redirect' => array(
+				'source' => 'nytsearch',
+				'type' => 'articles',
+				'params' => $result
+			)
+		);
 	}
 
 	protected function parseResponse ($data) {
+		$data = preg_replace('#/\*.+?\*/#sui', '', $data);
 		$data = json_decode($data, true);
 
-		if (empty($data) || empty($data['results']['bindings'])) {
-			return array();
-		} else if (isset($data['results'])) {
-			$data = $data['results']['bindings'][0];
-			$return = array();
-			foreach ($data as $field => $v) {
-				$return[$field] = $v['value'];
+		$key = null;
+		$keys = array_keys($data);
+		foreach ($keys as $k) {
+			if (!in_array($k, array('namepace', 'namespace')) && !preg_match('#\.rdf$#', $k)) {
+				$key = $k;
+				break;
 			}
-
-			return $return;
 		}
 
-		return $data;
+		if (empty($key)) {
+			return array();
+		}
+
+		return array(
+			'articles' => $data[$key]['nyt:associated_article_count'][0],
+			'name' => $data[$key]['skos:prefLabel'][0]
+		);
 	}
 
 	/**
