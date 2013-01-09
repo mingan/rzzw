@@ -3,7 +3,7 @@ if (empty($data)) {
 	echo 'No articles found';
 } else {
 	foreach ($data as $article) {
-		echo '<a class="article" href="' . $article['url'] . '">';
+		echo '<a class="article" href="' . $article['url'] . '" target="_blank">';
 		if (!empty($article['small_image_url'])) {
 			echo '<img src="' . $article['small_image_url'] . '" alt="Article photo" ';
 			if (!empty($article['small_image_height'])) {

@@ -26,7 +26,7 @@ class NytimesSearch extends Fetcher {
 
 		$params = array(
 			'api-key=' . static::$apiKey,
-			'query=' .  urlencode($options['name']),
+			'query=' .  urlencode($options['name'] . ' nytd_section_facet:[Sports]'),
 			'fields=title,body,url,date,small_image_url,small_image_height,small_image_width'
 		);
 
