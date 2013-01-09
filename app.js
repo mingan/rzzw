@@ -68,6 +68,8 @@ var map = {};
     var $Disciplines = $('#Disciplines');
 
     var $Winners = $('#Winners');
+    var $News = $('#News');
+
     this.toggler = function ($toToggle) {
         return $('<a href="#" alt="+" class="toggle btn">-</a>').click(function (e) {
             e.preventDefault();
@@ -199,7 +201,10 @@ var map = {};
 
         $Info.load('dispatch.php?source=dbpedia&type=bio&params=' + slug, null, function () {
             $Info.removeClass('loading');
+
+            _this.loadNews($Info.find('.nytUrl').attr('data-nyt'));
         });
+
     }
 
     this.loadPhotos = function ($Photos, slug) {
@@ -220,6 +225,18 @@ var map = {};
                     .css('width', $Photos.find('img').length * 262)
 
         });
+    }
+
+    this.loadNews = function (nytUrl) {
+        if (!nytUrl || nytUrl == '') {
+            $News.html('No articles found');
+            return;
+        }
+
+        $News.addClass('loading').html('Loading...')
+            .load('dispatch.php?source=nytdata&type=data&params=' + nytUrl, null, function () {
+                $News.removeClass('loading');
+            });
     }
 
 }).apply(rzzw);
