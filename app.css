@@ -81,12 +81,17 @@
     font-size: 1.2em;
     line-height: 1.6em;
     margin-bottom: 0;
+    margin-top: 1.2em;
 }
 #News .date {
     display: block;
     color: #999;
     margin-bottom: .5em;
     font-size: .9em;
+}
+#News img {
+    float: left;
+    margin: 0 .5em .5em 0;
 }
 #Photos {
     width: 100%;
@@ -112,7 +117,6 @@
     border: 1px solid #999;
 }
 .content .loading {
-    background: #ddd;
     position: relative;
 }
 .content .loading:before {
@@ -123,10 +127,14 @@
     position: absolute;
     top: 0;
     left: 0;
+    text-align: center;
+    line-height: 3em;
+    font-size: 3em;
 }
 
 #Attribution {
-    margin-top: 2em;
+    margin-top: 3em;
     clear: both;
     font-size: .9em;
+    float: left;
 }

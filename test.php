@@ -58,10 +58,16 @@
 
 		<div id="Attribution">
 			<h3>Attribution</h3>
-			<a href="http://wifo5-03.informatik.uni-mannheim.de/flickrwrappr/">flickr&trade; wrappr</a>
-			<a href="http://commons.wikimedia.org/wiki/File:Gold_medal.svg">Gold medal icon</a>
-			<a href="http://commons.wikimedia.org/wiki/File:Silver_medal.svg">Silver medal icon</a>
-			<a href="http://commons.wikimedia.org/wiki/File:Bronze_medal.svg">Bronze medal icon</a>
+			<a href="http://www.freebase.com/">Freebase - Olympic games, sports, disciplines, winners via MQL</a>,
+			<a href="http://dbpedia.org/">DBPedia - bio of athletes via SPARQL endpoint</a>,
+			<a href="https://developers.google.com/maps/">Google Maps API</a>,
+			<a href="http://developer.nytimes.com">NYTimes - NYT canonical names via RDF and articles via API</a>,
+			<a href="http://wifo5-03.informatik.uni-mannheim.de/flickrwrappr/">flickr&trade; wrappr - photos of athletes via RDF</a>,
+			<a href="http://commons.wikimedia.org/wiki/File:Gold_medal.svg">Wikimedia - gold medal icon</a>,
+			<a href="http://commons.wikimedia.org/wiki/File:Silver_medal.svg">Wikimedia - silver medal icon</a>,
+			<a href="http://commons.wikimedia.org/wiki/File:Bronze_medal.svg">Wikimedia - bronze medal icon</a>,
+			<a href="http://jquery.com">jQuery framework</a>,
+			<a href="http://twitter.github.com/bootstrap/">Bootstrap</a>
 		</div>
 	</div>
 

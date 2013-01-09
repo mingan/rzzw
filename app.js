@@ -83,6 +83,13 @@ var map = {};
         });
     }
 
+    this.clearDetails = function () {
+        $Winners.html('');
+        $Infoblock.html('');
+        $News.html('');
+        $Photos.html('');
+    }
+
     this.loadOlympics = function () {
         $Olympics.load('dispatch.php?source=freebase&type=games', null, function () {
             _this.olympicsLoaded();
@@ -107,6 +114,7 @@ var map = {};
     }
 
     this.loadEventsFor = function (mid) {
+        _this.clearDetails();
         $EventsSelector
             .parent('.hide')
             .removeClass('hide')
@@ -139,6 +147,7 @@ var map = {};
     }
 
     this.loadDisciplinesFor = function (mid) {
+        _this.clearDetails();
         $DisciplinesSelector
             .parent('.hide')
             .removeClass('hide')
@@ -170,6 +179,7 @@ var map = {};
     }
 
     this.loadWinnersOf = function (mid) {
+        _this.clearDetails();
         $Winners.addClass('loading').parent().show();
         $Winners.load('dispatch.php?source=freebase&type=winners&params=' + mid, null, function () {
             $Winners
@@ -186,7 +196,11 @@ var map = {};
     this.loadPersonalInfo = function ($link) {
         var slug = $link.attr('data-wiki');
 
+        $Photos.html('');
+        $News.html('');
+
         $Infoblock
+            .html('')
             .parent()
                 .show()
             .end()
