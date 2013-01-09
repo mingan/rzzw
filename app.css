@@ -6,12 +6,15 @@
     padding: 0 2em;
 }
 #Map {
-    width: 600px;
-    height: 400px;
+    width: 800px;
+    height: 600px;
     float: right;
 }
 #Map img {
     max-width: none;
+}
+#Map label {
+    width: auto; display:inline;
 }
 #Winners {
     min-width: 400px;

@@ -42,18 +42,18 @@ var map = {};
 
     }
 
-    this.addMarker = function (position, callback) {
+    this.addMarker = function (country, position, callback) {
         var marker = new google.maps.Marker({
-            map : _this.map,
+            map : map,
             position : position,
-            title : " "
+            title : country
         });
         markers.push(marker);
         callback(position);
     }
     this.geocode = function (query, callback) {
         if (cache[query] != undefined) {
-            _this.addMarker(cache[query], callback);
+            _this.addMarker(query, cache[query], callback);
         } else {
             geocoder.geocode( {
                 'address': query
@@ -61,7 +61,7 @@ var map = {};
                 if (status == google.maps.GeocoderStatus.OK) {
                     if (results[0].types.indexOf("country") != -1) {
                         var pos = new google.maps.LatLng(results[0].geometry.location.Ya, results[0].geometry.location.Za);
-                        _this.addMarker(pos, callback)
+                        _this.addMarker(query, pos, callback)
                         cache[query] = pos;
                     }
                 } else {
