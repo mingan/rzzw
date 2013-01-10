@@ -88,7 +88,7 @@ var map = {};
     var $News = $('#News');
     var $Photos = $('#Photos');
 
-    $Winners.parent().hide();
+    $Winners.hide();
     $Infoblock.parent().hide();
     $News.parent().hide();
     $Photos.parent().hide();
@@ -196,7 +196,7 @@ var map = {};
 
     this.loadWinnersOf = function (mid) {
         _this.clearDetails();
-        $Winners.addClass('loading').parent().show();
+        $Winners.addClass('loading').show();
         $Winners.load('dispatch.php?source=freebase&type=winners&params=' + mid, null, function () {
             $Winners
                 .removeClass('loading')
@@ -255,7 +255,6 @@ var map = {};
 
 }).apply(rzzw);
 
-jQuery(document).ready(function ($) {
+jQuery('document').ready(function ($) {
     rzzw.loadOlympics();
-    map.hideMap();
 });
