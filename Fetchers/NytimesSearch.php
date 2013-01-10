@@ -18,15 +18,10 @@ class NytimesSearch extends Fetcher {
 		if (isset($options['params'])) {
 			$options = $options['params'];
 		}
-		$default = array(
-			'articles' => 10,
-			'name' => null
-		);
-		$options += $default;
-
+		
 		$params = array(
 			'api-key=' . static::$apiKey,
-			'query=' .  urlencode($options['name'] . ' nytd_section_facet:[Sports]'),
+			'query=' .  urlencode($options . ' nytd_section_facet:[Sports]'),
 			'fields=title,body,url,date,small_image_url,small_image_height,small_image_width'
 		);
 

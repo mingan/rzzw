@@ -43,47 +43,6 @@ class NytimesData extends Fetcher {
 			return array();
 		}
 
-		return array(
-			'articles' => $data[$key]['nyt:associated_article_count'][0],
-			'name' => $data[$key]['skos:prefLabel'][0]
-		);
-	}
-
-	/**
-	 * Get SPARQL query
-	 *
-	 * @param mixed $ident String ident in Wikipedia/DBPedia
-	 * @return string
-	 */
-	private function constructQuery ($ident = null) {
-		if (empty($ident)) {
-			return '';
-		}
-
-		$dbpUrl = '<http://dbpedia.org/resource/' . $ident . '>';
-		$query =
-			'PREFIX foaf: <http://xmlns.com/foaf/0.1/> ' .
-			'PREFIX dbo: <http://dbpedia.org/ontology/> ' .
-			'PREFIX owl: <http://www.w3.org/2002/07/owl#> ' .
-
-			'select ?abstract, ?img, ?name, ?nyt where {' .
-				'{' .
-					$dbpUrl . ' a foaf:Person;' .
-						'foaf:name ?name;' .
-						'dbo:abstract ?abstract . ' .
-					'OPTIONAL {' . $dbpUrl . ' foaf:depiction ?img }' .
-				    'OPTIONAL {?nyt owl:sameAs ' . $dbpUrl . ' FILTER regex(?nyt, \'http://data\\\.nytimes\\\.com/.*\')}' .
-				'} UNION {' .
-					$dbpUrl . ' dbo:wikiPageRedirects ?u .' .
-					'?u a foaf:Person;' .
-						'foaf:name ?name;' .
-						'dbo:abstract ?abstract . ' .
-					'OPTIONAL { ?u foaf:depiction ?img } ' .
-					'OPTIONAL { ?nyt owl:sameAs ?u FILTER regex(?nyt, \'http://data\\\.nytimes\\\.com/.*\')} ' .
-				'}' .
-				'FILTER langMatches( lang(?abstract), "EN" )' .
-			'} LIMIT 1'; // @todo víc?
-
-		return $query;
+		return $data[$key]['skos:prefLabel'][0];
 	}
 }
